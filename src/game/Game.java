@@ -42,19 +42,19 @@ public class Game {
 			Card first = dealer.getCard();
 			Card second = dealer.getCard();
 
-			System.out.println("Dealer's first card is: " + first.getRank());
+			System.out.println("Dealer's first card is: " + first.toString());
 
 			first = player.getCard();
 			second = player.getCard();
 
-			System.out.println("Your first two cards are: " + first.getRank() + " and " + second.getRank() + ".");
+			System.out.println("Your first two cards are: " + first.toString() + " and " + second.toString() + ".");
 			System.out.println("Your current hand value is: " + player.getHandValue());
 
 			int playerValue = playerTurn();
 			int dealerValue = dealerTurn();
 
 			System.out.println("=================");
-			
+
 			if (dealerValue > 21 || ((dealerValue < playerValue) && dealerValue < 21)) {
 				System.out.println("Player wins!");
 				playerWins++;
@@ -69,8 +69,9 @@ public class Game {
 			System.out.println("Player loses:" + playerLoses);
 
 			System.out.println("Want to play again? (Y/N)");
-			if (scanner.next() == "N") {
+			if (scanner.next().equals("N")) {
 				stop = true;
+				scanner.close();
 			}
 			prepareForNextTurn();
 
@@ -92,7 +93,7 @@ public class Game {
 			switch (operation) {
 			case 1:
 				Card card = player.getCard();
-				System.out.println("You pull a:" + card.getRank());
+				System.out.println("You pull a:" + card.toString());
 				System.out.println("Your current hand value is: " + player.getHandValue());
 				if (player.getHandValue() > 21) {
 					System.out.println("You are bust!");
@@ -119,7 +120,7 @@ public class Game {
 
 		while (dealer.getHandValue() < 17) {
 			Card card = dealer.getCard();
-			System.out.println("Dealer draws a: " + card.getRank());
+			System.out.println("Dealer draws a: " + card.toString());
 			System.out.println("Dealer's hand value is: " + dealer.getHandValue());
 
 		}
@@ -127,7 +128,7 @@ public class Game {
 	}
 
 	/**
-	 * Clears all the hands and reshufles the deck for the next turnF
+	 * Clears all the hands and shuffles the deck for the next turnF
 	 */
 	private void prepareForNextTurn() {
 		player.clear();

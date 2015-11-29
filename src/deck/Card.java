@@ -1,5 +1,7 @@
 package deck;
 
+import utils.Cons;
+
 /**
  * Card is the class that describes one of the 52 French playing cards
  * 
@@ -21,6 +23,26 @@ public class Card {
 
 	public int getSuit() {
 		return suit;
+	}
+
+	public String toString(){
+		String card = Integer.toString(rank);
+		switch(suit){
+		case Cons.CLUBS:
+			card+=" Of Clubs";
+			break;
+		case Cons.DIAMONDS:
+			card+=" Of Diamonds";
+			break;
+		case Cons.HEARTS:
+			card+=" Of Hearts";
+			break;
+		case Cons.SPADES:
+			card+=" Of Spades";
+			break;
+		}
+		return card;
+			
 	}
 
 }
