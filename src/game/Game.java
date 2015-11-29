@@ -22,6 +22,7 @@ public class Game {
 	private int playerWins;
 	private int playerLoses;
 	private boolean stop;
+	private Scanner scanner;
 
 	public Game(Deck deck, Hand player, Hand dealer) {
 		this.deck = deck;
@@ -29,48 +30,109 @@ public class Game {
 		this.dealer = dealer;
 		this.playerWins = 0;
 		this.playerLoses = 0;
+		this.stop = false;
+		this.scanner = new Scanner(System.in);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public int playerTurn() {
+	public void start() {
+		System.out.println("BLACKJACK");
+		while (!stop) {
+			System.out.println("Dealing the first two cards:");
+
+			Card first = dealer.getCard();
+			Card second = dealer.getCard();
+
+			System.out.println("Dealer's first card is: " + first.getRank());
+
+			first = player.getCard();
+			second = player.getCard();
+
+			System.out.println("Your first two cards are: " + first.getRank() + " and " + second.getRank() + ".");
+			System.out.println("Your current hand value is: " + player.getHandValue());
+
+			int playerValue = playerTurn();
+			int dealerValue = dealerTurn();
+
+			System.out.println("=================");
+			
+			if (dealerValue > 21 || ((dealerValue < playerValue) && dealerValue < 21)) {
+				System.out.println("Player wins!");
+				playerWins++;
+			} else if (playerValue > 21 || ((playerValue < dealerValue) && playerValue < 21)) {
+				System.out.println("Dealer wins!");
+				playerLoses++;
+			} else if (playerValue == dealerValue) {
+				System.out.println("Push!");
+			}
+
+			System.out.println("Player wins:" + playerWins);
+			System.out.println("Player loses:" + playerLoses);
+
+			System.out.println("Want to play again? (Y/N)");
+			if (scanner.next() == "N") {
+				stop = true;
+			}
+			prepareForNextTurn();
+
+		}
+
+	}
+
+	private int playerTurn() {
 
 		boolean end = false;
-		Scanner scanner = new Scanner(System.in);
-	
+
 		System.out.println("Player's turn");
-		// Deal the two first cards
-		Card first = player.getCard();
-		Card second = player.getCard();
-
-		System.out.println("Your first two cards are: " + first.getRank() + " and " + second.getRank() + ".");
-		System.out.println("Your current hand value is: " + player.getHandValue());
-
 		while (!end) {
 			System.out.println("What do you want to do now?");
 			System.out.println("1-Hit");
 			System.out.println("2-Stand");
 			int operation = scanner.nextInt();
-			
+
 			switch (operation) {
 			case 1:
-				Card card=player.getCard();
-				System.out.println("You pull a:"+card.getRank());
-				System.out.println("Your current hand value is: "+player.getHandValue());
-				if(player.getHandValue()>21){
+				Card card = player.getCard();
+				System.out.println("You pull a:" + card.getRank());
+				System.out.println("Your current hand value is: " + player.getHandValue());
+				if (player.getHandValue() > 21) {
 					System.out.println("You are bust!");
-					end=true;
+					end = true;
 				}
 				break;
 
 			case 2:
-				end=true;
+				end = true;
 			}
 
 		}
 		return player.getHandValue();
+	}
+
+	/**
+	 * Play a turn of the dealer, that must keep drawing cards until the value
+	 * of his hand is 17 or above
+	 * 
+	 * @return
+	 */
+	private int dealerTurn() {
+		System.out.println("Dealer's turn");
+
+		while (dealer.getHandValue() < 17) {
+			Card card = dealer.getCard();
+			System.out.println("Dealer draws a: " + card.getRank());
+			System.out.println("Dealer's hand value is: " + dealer.getHandValue());
+
+		}
+		return dealer.getHandValue();
+	}
+
+	/**
+	 * Clears all the hands and reshufles the deck for the next turnF
+	 */
+	private void prepareForNextTurn() {
+		player.clear();
+		dealer.clear();
+		deck.shuffleDeck();
 	}
 
 }

@@ -13,6 +13,6 @@ public class Blackjack {
 		Hand dealer = new Hand(deck);
 		
 		Game game = new Game(deck, player, dealer);
-		game.playerTurn();
+		game.start();
 	}
 }
